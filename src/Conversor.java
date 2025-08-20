@@ -11,7 +11,7 @@ public class Conversor {
         // ===============================================================
         String apiKey = "28034ad7794a3e724d0ad83c";
 
-        // Lista de las monedas disponibles para la conversión.
+        // Lista de monedas disponibles para la conversión.
         List<String> currencies = List.of("USD", "MXN", "KRW", "JPY", "CNY", "ARS", "BRL", "COP");
         Scanner scanner = new Scanner(System.in);
 
