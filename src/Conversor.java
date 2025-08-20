@@ -7,7 +7,7 @@ public class Conversor {
 
     public static void main(String[] args) {
         // ===============================================================
-        // ==      IMPORTANTE: Coloca tu clave de API personal aquí      ==
+        // ==      IMPORTANTE: Coloca clave de API personal aquí      ==
         // ===============================================================
         String apiKey = "28034ad7794a3e724d0ad83c";
 
