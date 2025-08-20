@@ -1,5 +1,6 @@
 import com.google.gson.JsonObject;
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 public class Conversor {
@@ -10,76 +11,72 @@ public class Conversor {
         // ===============================================================
         String apiKey = "28034ad7794a3e724d0ad83c";
 
+        // Lista de las monedas disponibles para la conversión.
+        List<String> currencies = List.of("USD", "MXN", "KRW", "JPY", "CNY", "ARS", "BRL", "COP");
         Scanner scanner = new Scanner(System.in);
 
         try {
             while (true) {
                 System.out.println("\n***************************************************");
-                System.out.println("Sea bienvenido/a al Conversor de Moneda =]");
-                System.out.println("Moneda Base: Peso Mexicano (MXN)");
-                System.out.println("\n--- Conversiones con Dólar Estadounidense ---");
-                System.out.println("1) Peso Mexicano (MXN) =>> Dólar (USD)");
-                System.out.println("2) Dólar (USD) =>> Peso Mexicano (MXN)");
-                System.out.println("\n--- Conversiones con Monedas Asiáticas ---");
-                System.out.println("3) Peso Mexicano (MXN) =>> Won surcoreano (KRW)");
-                System.out.println("4) Won surcoreano (KRW) =>> Peso Mexicano (MXN)");
-                System.out.println("5) Peso Mexicano (MXN) =>> Yen Japonés (JPY)");
-                System.out.println("6) Yen Japonés (JPY) =>> Peso Mexicano (MXN)");
-                System.out.println("7) Peso Mexicano (MXN) =>> Yuan Chino (CNY)");
-                System.out.println("8) Yuan Chino (CNY) =>> Peso Mexicano (MXN)");
-                System.out.println("\n9) Salir");
-                System.out.print("Elija una opción válida: ");
-                System.out.println("\n***************************************************");
+                System.out.println("Sea bienvenido/a al Conversor de Moneda Universal");
 
-                int option = scanner.nextInt();
+                // Menú para la moneda de ORIGEN
+                System.out.println("\nElija la moneda de ORIGEN:");
+                printCurrencyMenu(currencies);
+                System.out.print("Su opción (o 0 para salir): ");
+                int fromIndex = scanner.nextInt();
 
-                if (option == 9) {
-                    System.out.println("Gracias por usar el conversor. ¡Hasta luego! 👋");
-                    break;
+                if (fromIndex == 0) {
+                    break; // Salir del bucle principal
                 }
 
-                if (option < 1 || option > 8) {
+                // Menú para la moneda de DESTINO
+                System.out.println("\nElija la moneda de DESTINO:");
+                printCurrencyMenu(currencies);
+                System.out.print("Su opción (o 0 para salir): ");
+                int toIndex = scanner.nextInt();
+
+                if (toIndex == 0) {
+                    break; // Salir del bucle principal
+                }
+
+                // Validar selección
+                if (fromIndex < 1 || fromIndex > currencies.size() || toIndex < 1 || toIndex > currencies.size()) {
                     System.out.println("Opción no válida, por favor intente de nuevo.");
                     continue;
                 }
 
-                System.out.print("Ingrese el valor que desea convertir: ");
+                // Obtener los códigos de moneda
+                String fromCurrency = currencies.get(fromIndex - 1);
+                String toCurrency = currencies.get(toIndex - 1);
+
+                // Solicitar el monto
+                System.out.print("\nIngrese el valor que desea convertir de " + fromCurrency + " a " + toCurrency + ": ");
                 double amount = scanner.nextDouble();
 
-                String fromCurrency = "";
-                String toCurrency = "";
-
-                // Lógica para asignar las monedas según la opción del usuario
-                switch (option) {
-                    case 1: fromCurrency = "MXN"; toCurrency = "USD"; break;
-                    case 2: fromCurrency = "USD"; toCurrency = "MXN"; break;
-                    case 3: fromCurrency = "MXN"; toCurrency = "KRW"; break;
-                    case 4: fromCurrency = "KRW"; toCurrency = "MXN"; break;
-                    case 5: fromCurrency = "MXN"; toCurrency = "JPY"; break;
-                    case 6: fromCurrency = "JPY"; toCurrency = "MXN"; break;
-                    case 7: fromCurrency = "MXN"; toCurrency = "CNY"; break;
-                    case 8: fromCurrency = "CNY"; toCurrency = "MXN"; break;
-                }
-
-                // Llamamos a la API para obtener las tasas de cambio
+                // Llamar a la API
                 JsonObject rates = ApiHandler.getExchangeRates(apiKey, fromCurrency).getAsJsonObject("conversion_rates");
-
-                // Obtenemos la tasa específica que necesitamos
                 double exchangeRate = rates.get(toCurrency).getAsDouble();
-
-                // Calculamos el resultado
                 double result = amount * exchangeRate;
 
-                // Mostramos el resultado formateado
+                // Mostrar resultado
                 System.out.printf("\nEl valor de %.2f [%s] corresponde al valor final de =>>> %.2f [%s]%n",
                         amount, fromCurrency, result, toCurrency);
             }
         } catch (IOException | InterruptedException e) {
             System.err.println("Error al consultar la API: " + e.getMessage());
         } catch (Exception e) {
-            System.err.println("Ocurrió un error inesperado: " + e.getMessage());
+            System.err.println("Ocurrió un error inesperado. Verifique su entrada.");
         } finally {
             scanner.close();
+            System.out.println("\nGracias por usar el conversor. ¡Hasta luego! 👋");
+        }
+    }
+
+    // Método auxiliar para imprimir el menú de monedas.
+    private static void printCurrencyMenu(List<String> currencies) {
+        for (int i = 0; i < currencies.size(); i++) {
+            System.out.printf("%d) %s%n", i + 1, currencies.get(i));
         }
     }
 }
