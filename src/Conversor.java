@@ -14,26 +14,31 @@ public class Conversor {
 
         try {
             while (true) {
-                System.out.println("\n***********************************************");
+                System.out.println("\n***************************************************");
                 System.out.println("Sea bienvenido/a al Conversor de Moneda =]");
-                System.out.println("1) Dólar =>> Peso Argentino");
-                System.out.println("2) Peso Argentino =>> Dólar");
-                System.out.println("3) Dólar =>> Real Brasileño");
-                System.out.println("4) Real Brasileño =>> Dólar");
-                System.out.println("5) Dólar =>> Peso Colombiano");
-                System.out.println("6) Peso Colombiano =>> Dólar");
-                System.out.println("7) Salir");
+                System.out.println("Moneda Base: Peso Mexicano (MXN)");
+                System.out.println("\n--- Conversiones con Dólar Estadounidense ---");
+                System.out.println("1) Peso Mexicano (MXN) =>> Dólar (USD)");
+                System.out.println("2) Dólar (USD) =>> Peso Mexicano (MXN)");
+                System.out.println("\n--- Conversiones con Monedas Asiáticas ---");
+                System.out.println("3) Peso Mexicano (MXN) =>> Won surcoreano (KRW)");
+                System.out.println("4) Won surcoreano (KRW) =>> Peso Mexicano (MXN)");
+                System.out.println("5) Peso Mexicano (MXN) =>> Yen Japonés (JPY)");
+                System.out.println("6) Yen Japonés (JPY) =>> Peso Mexicano (MXN)");
+                System.out.println("7) Peso Mexicano (MXN) =>> Yuan Chino (CNY)");
+                System.out.println("8) Yuan Chino (CNY) =>> Peso Mexicano (MXN)");
+                System.out.println("\n9) Salir");
                 System.out.print("Elija una opción válida: ");
-                System.out.println("\n***********************************************");
+                System.out.println("\n***************************************************");
 
                 int option = scanner.nextInt();
 
-                if (option == 7) {
-                    System.out.println("Gracias por usar el conversor. ¡Hasta luego!");
+                if (option == 9) {
+                    System.out.println("Gracias por usar el conversor. ¡Hasta luego! 👋");
                     break;
                 }
 
-                if (option < 1 || option > 6) {
+                if (option < 1 || option > 8) {
                     System.out.println("Opción no válida, por favor intente de nuevo.");
                     continue;
                 }
@@ -41,29 +46,31 @@ public class Conversor {
                 System.out.print("Ingrese el valor que desea convertir: ");
                 double amount = scanner.nextDouble();
 
-                // Definimos las monedas de origen y destino según la opción del usuario.
                 String fromCurrency = "";
                 String toCurrency = "";
 
+                // Lógica para asignar las monedas según la opción del usuario
                 switch (option) {
-                    case 1: fromCurrency = "USD"; toCurrency = "ARS"; break;
-                    case 2: fromCurrency = "ARS"; toCurrency = "USD"; break;
-                    case 3: fromCurrency = "USD"; toCurrency = "BRL"; break;
-                    case 4: fromCurrency = "BRL"; toCurrency = "USD"; break;
-                    case 5: fromCurrency = "USD"; toCurrency = "COP"; break;
-                    case 6: fromCurrency = "COP"; toCurrency = "USD"; break;
+                    case 1: fromCurrency = "MXN"; toCurrency = "USD"; break;
+                    case 2: fromCurrency = "USD"; toCurrency = "MXN"; break;
+                    case 3: fromCurrency = "MXN"; toCurrency = "KRW"; break;
+                    case 4: fromCurrency = "KRW"; toCurrency = "MXN"; break;
+                    case 5: fromCurrency = "MXN"; toCurrency = "JPY"; break;
+                    case 6: fromCurrency = "JPY"; toCurrency = "MXN"; break;
+                    case 7: fromCurrency = "MXN"; toCurrency = "CNY"; break;
+                    case 8: fromCurrency = "CNY"; toCurrency = "MXN"; break;
                 }
 
-                // Obtenemos todas las tasas de cambio para la moneda de origen.
+                // Llamamos a la API para obtener las tasas de cambio
                 JsonObject rates = ApiHandler.getExchangeRates(apiKey, fromCurrency).getAsJsonObject("conversion_rates");
 
-                // Obtenemos la tasa específica para la moneda de destino[cite: 62].
+                // Obtenemos la tasa específica que necesitamos
                 double exchangeRate = rates.get(toCurrency).getAsDouble();
 
-                // Calculamos el resultado.
+                // Calculamos el resultado
                 double result = amount * exchangeRate;
 
-                // Mostramos el resultado al usuario.
+                // Mostramos el resultado formateado
                 System.out.printf("\nEl valor de %.2f [%s] corresponde al valor final de =>>> %.2f [%s]%n",
                         amount, fromCurrency, result, toCurrency);
             }
