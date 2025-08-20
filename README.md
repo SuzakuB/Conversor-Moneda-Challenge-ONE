@@ -25,9 +25,10 @@ Para ejecutar este proyecto en tu máquina local, sigue estos pasos:
 
 Clona el repositorio:
 
+```
 Bash
-
 git clone https://github.com/SuzakuB/Conversor-de-Moneda.git
+```
 Abre el proyecto en tu IDE de preferencia (se recomienda IntelliJ IDEA).
 
 Obtén tu API Key:
