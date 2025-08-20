@@ -35,7 +35,7 @@ Obtén tu API Key:
 
 Crea una cuenta gratuita en 
 
-ExchangeRate-API para generar tu clave de API personal. 
+[ExchangeRate-API](https://www.exchangerate-api.com/) para generar tu clave de API personal. 
 
 Configura tu API Key:
 
